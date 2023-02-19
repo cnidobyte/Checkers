@@ -28,6 +28,7 @@ public class CheckersLogic {
 	
 	/**
 	 * Intro point for the game. Initialize the game board, the pieces, and calls methods to print ui.
+	 * Options to start player game or computer game.
 	 */
 	public void gameStart() {
 		gameboard = new Board();
@@ -53,7 +54,7 @@ public class CheckersLogic {
 	}
 	
 	/**
-	 * Main game loop. Turns decided on the truth of xTurn. 
+	 * Main game loop for player controlled games. Turns decided on the truth of xTurn. 
 	 */
 	private void playerRounds() {
 		while(!gameOver()) {
@@ -67,6 +68,9 @@ public class CheckersLogic {
 		}
 	}
 	
+	/**
+	 * Game loop for games against computer players.
+	 */
 	private void versusComputer() {
 		while(!gameOver()) {
 			if(xTurn) {
@@ -115,19 +119,21 @@ public class CheckersLogic {
 	 * @param Move  Coordinates for the move.
 	 */
 	public void movePiece(Move move) {
-		//TODO: Parse inputs to moves, take format 2A-3B
 		
 		while(!validMove(move)) {
-			//TODO: Print Invalid, reprompt.
+			//Print Invalid, reprompt.
 			System.out.println("oops!");
-			System.out.println("This move is a jump: " + move.isJump());
-			System.out.println("This move is adjacent: " + move.isAdjacent());
+			//	Testing print statements.
+			//	System.out.println("This move is a jump: " + move.isJump());
+			//	System.out.println("This move is adjacent: " + move.isAdjacent());
 			uiHandler.displayTurnPrompt(xTurn);
 			String moveInput = scan.nextLine();
 			move = new Move(moveInput);
 		}
 		
 		// Moves the piece to the destination spot, removing opponent pieces if jumped.
+		// Could make into individual function. Would have to pass Board and Move objects.
+		// Clean up could involve adding an additional constructor for Piece, refactor to prevent repetitiveness.
 		if(gameboard.getExPieces().containsKey(move.getSourceCoords())) {
 			gameboard.getExPieces().put(
 					move.getDestinationCoords(), 
@@ -158,7 +164,7 @@ public class CheckersLogic {
 	/**
 	 * Checks if the move entered is valid. Ensures that the player is only moving their own piece. Checks if 
 	 * the move is diagonally adjacent or is a jump.
-	 * @return boolean
+	 * @return boolean	true if move is valid.
 	 */
 	public boolean validMove(Move move) {
 		
@@ -179,7 +185,7 @@ public class CheckersLogic {
 
 	/**
 	 * For the Pieces belonging to player, checks if there are valid moves available.
-	 * @return boolean
+	 * @return boolean	true if moves are available
 	 */
 	public boolean movesAvailable(PlayerType player) {
 		// TODO: add parameters, functionality, update Javadoc.
